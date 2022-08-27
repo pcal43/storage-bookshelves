@@ -4,7 +4,7 @@
   "package": "net.pcal.wallsafe.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "BlockClicked"
+    "BlockClickedMixin"
   ],
   "injectors": {
     "defaultRequire": 1

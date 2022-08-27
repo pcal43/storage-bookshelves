@@ -32,16 +32,16 @@ class WallSafeRuntimeConfig {
 
     record Rule(
             String name,
-            List<Identifier> clickedBlockIds,
-            List<Identifier> adjacentBlockIds,
-            List<String> adjacentBlockNames,
+            Set<Identifier> clickedBlockIds,
+            Set<Identifier> adjacentBlockIds,
+            Set<String> adjacentBlockNames,
             List<Direction> directions
     ) {
 
         Rule(String name,
-             List<Identifier> clickedBlockIds,
-             List<Identifier> adjacentBlockIds,
-             List<String> adjacentBlockNames,
+             Set<Identifier> clickedBlockIds,
+             Set<Identifier> adjacentBlockIds,
+             Set<String> adjacentBlockNames,
              List<Direction> directions) {
             this.name = name != null ? name : "unnamed";
             this.clickedBlockIds = clickedBlockIds;

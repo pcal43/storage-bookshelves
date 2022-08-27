@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.Gson;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.pcal.wallsafe.WallSafeRuntimeConfig.Rule;
@@ -16,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -29,12 +27,9 @@ public class WallSafeInitializer implements ModInitializer {
     // ===================================================================================
     // Constants
 
-    private static final Path CUSTOM_CONFIG_PATH = Paths.get("config", "trailblazer.json5");
+    private static final Path CUSTOM_CONFIG_PATH = Paths.get("config", "wallsafe.json5");
     private static final Path DEFAULT_CONFIG_PATH = Paths.get("config", "wallsafe-default.json5");
-    private static final Set<Identifier> DEFAULT_ENTITY_IDS = ImmutableSet.of(new Identifier("minecraft:player"));
     private static final String CONFIG_RESOURCE_NAME = "wallsafe-default.json5";
-    public static final int DEFAULT_STEP_COUNT = 0;
-    public static final int DEFAULT_TIMEOUT_TICKS = 72000;
 
     // ===================================================================================
     // ModInitializer implementation
@@ -94,27 +89,21 @@ public class WallSafeInitializer implements ModInitializer {
         requireNonNull(config);
         final ImmutableList.Builder<Rule> builder = ImmutableList.builder();
         for (int i=0; i < config.rules.size(); i++) {
-            /**
             final GsonRuleConfig gsonRule = config.rules.get(i);
             final Rule rule = new Rule(
                     gsonRule.name != null ? gsonRule.name : "rule-"+i,
-                    new Identifier(requireNonNull(gsonRule.blockId)),
-                    new Identifier(requireNonNull(gsonRule.nextBlockId)),
-                    gsonRule.stepCount != null ? gsonRule.stepCount : DEFAULT_STEP_COUNT,
-                    gsonRule.timeoutTicks != null ? gsonRule.timeoutTicks : DEFAULT_TIMEOUT_TICKS,
-                    gsonRule.entityIds != null ? toIdentifierSet(gsonRule.entityIds) : DEFAULT_ENTITY_IDS,
-                    toSpawnGroupList(gsonRule.spawnGroups),
-                    toIdentifierSetList(gsonRule.skipIfBoots),
-                    toIdentifierSetList(gsonRule.onlyIfBoots)
+                    toIdentifierSetOrNull(gsonRule.blockIds),
+                    toIdentifierSetOrNull(gsonRule.adjacentBlockIds),
+                    toStringSetOrNull(gsonRule.adjacentBlockNames),
+                    toDirectionListOrNull(gsonRule.directions)
             );
             builder.add(rule);
-             **/
         }
         return new WallSafeRuntimeConfig(builder.build());
     }
 
-    private static Set<Identifier> toIdentifierSet(List<String> rawIds) {
-        if (rawIds == null) return Collections.emptySet();
+    private static Set<Identifier> toIdentifierSetOrNull(List<String> rawIds) {
+        if (rawIds == null || rawIds.isEmpty()) return null;
         final ImmutableSet.Builder<Identifier> builder = ImmutableSet.builder();
         for (String rawId : rawIds) {
             builder.add(new Identifier(rawId));
@@ -122,17 +111,13 @@ public class WallSafeInitializer implements ModInitializer {
         return builder.build();
     }
 
-    private static List<Set<Identifier>> toIdentifierSetList(List<List<String>> rawIdLists) {
-        if (rawIdLists == null) return Collections.emptyList();
-        final ImmutableList.Builder<Set<Identifier>> builder = ImmutableList.builder();
-        for (List<String> rawIdList : rawIdLists) {
-            builder.add(toIdentifierSet(rawIdList));
-        }
-        return builder.build();
+    private static Set<String> toStringSetOrNull(List<String> rawStrings) {
+        if (rawStrings == null || rawStrings.isEmpty()) return null;
+        return ImmutableSet.copyOf(rawStrings);
     }
 
-    private static List<Direction> toDirectionList(Iterable<String> rawIds) {
-        if (rawIds == null) return null;
+    private static List<Direction> toDirectionListOrNull(List<String> rawIds) {
+        if (rawIds == null || rawIds.isEmpty()) return null;
         final ImmutableList.Builder<Direction> builder = ImmutableList.builder();
         rawIds.forEach(d -> builder.add(Direction.byName(d)));
         return builder.build();
