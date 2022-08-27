@@ -1,10 +1,8 @@
 package net.pcal.wallsafe;
 
 import com.google.common.collect.*;
-import net.minecraft.block.Block;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 
 import java.util.*;
 

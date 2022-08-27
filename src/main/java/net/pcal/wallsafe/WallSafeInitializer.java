@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 import net.pcal.wallsafe.WallSafeRuntimeConfig.Rule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -130,10 +131,10 @@ public class WallSafeInitializer implements ModInitializer {
         return builder.build();
     }
 
-    private static Set<SpawnGroup> toSpawnGroupList(Iterable<String> rawIds) {
-        if (rawIds == null) return Collections.emptySet();
-        final ImmutableSet.Builder<SpawnGroup> builder = ImmutableSet.builder();
-        rawIds.forEach(sg -> builder.add(SpawnGroup.valueOf(sg)));
+    private static List<Direction> toDirectionList(Iterable<String> rawIds) {
+        if (rawIds == null) return null;
+        final ImmutableList.Builder<Direction> builder = ImmutableList.builder();
+        rawIds.forEach(d -> builder.add(Direction.byName(d)));
         return builder.build();
     }
 
@@ -156,13 +157,9 @@ public class WallSafeInitializer implements ModInitializer {
 
     public static class GsonRuleConfig {
         String name;
-        String blockId;
-        String nextBlockId;
-        Integer timeoutTicks;
-        Integer stepCount;
-        List<String> entityIds;
-        List<String> spawnGroups;
-        List<List<String>> onlyIfBoots;
-        List<List<String>> skipIfBoots;
+        List<String> blockIds;
+        List<String> adjacentBlockIds;
+        List<String> adjacentBlockNames;
+        List<String> directions;
     }
 }
