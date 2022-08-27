@@ -97,9 +97,9 @@ public class WallSafeService {
                 if (rule.adjacentBlockIds() != null && !rule.adjacentBlockIds().contains(adjacentBlockId)) {
                     continue;
                 }
-                if (rule.adjacentBlockNames() != null && !rule.adjacentBlockNames().contains(adjacentBlockId)) {//FIXME
-                    continue;
-                }
+//                if (rule.adjacentBlockNames() != null && !rule.adjacentBlockNames().contains(adjacentBlockId)) {//FIXME
+//                    continue;
+//                }
                 adjancentBlock.onUse(state, world, adjacentBlockPos, player, hand, hit);
                 cir.cancel();
                 cir.setReturnValue(ActionResult.SUCCESS);
