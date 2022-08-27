@@ -1,4 +1,4 @@
-package net.pcal.trailblazer;
+package net.pcal.wallsafe;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.Identifier;
-import net.pcal.trailblazer.TrailblazerRuntimeConfig.Rule;
+import net.pcal.wallsafe.WallSafeRuntimeConfig.Rule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,18 +20,18 @@ import java.util.List;
 import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
-import static net.pcal.trailblazer.TrailblazerService.LOGGER_NAME;
-import static net.pcal.trailblazer.TrailblazerService.LOG_PREFIX;
+import static net.pcal.wallsafe.WallSafeService.LOGGER_NAME;
+import static net.pcal.wallsafe.WallSafeService.LOG_PREFIX;
 
-public class TrailblazerInitializer implements ModInitializer {
+public class WallSafeInitializer implements ModInitializer {
 
     // ===================================================================================
     // Constants
 
     private static final Path CUSTOM_CONFIG_PATH = Paths.get("config", "trailblazer.json5");
-    private static final Path DEFAULT_CONFIG_PATH = Paths.get("config", "trailblazer-default.json5");
+    private static final Path DEFAULT_CONFIG_PATH = Paths.get("config", "wallsafe-default.json5");
     private static final Set<Identifier> DEFAULT_ENTITY_IDS = ImmutableSet.of(new Identifier("minecraft:player"));
-    private static final String CONFIG_RESOURCE_NAME = "trailblazer-default.json5";
+    private static final String CONFIG_RESOURCE_NAME = "wallsafe-default.json5";
     public static final int DEFAULT_STEP_COUNT = 0;
     public static final int DEFAULT_TIMEOUT_TICKS = 72000;
 
@@ -56,7 +56,7 @@ public class TrailblazerInitializer implements ModInitializer {
         // Load the default configuration from resources and write it as the -default in the installation
         //
         final String defaultConfigResourceRaw;
-        try (InputStream in = TrailblazerInitializer.class.getClassLoader().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
+        try (InputStream in = WallSafeInitializer.class.getClassLoader().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
             if (in == null) {
                 throw new FileNotFoundException("Unable to load resource " + CONFIG_RESOURCE_NAME); // wat
             }
@@ -82,14 +82,14 @@ public class TrailblazerInitializer implements ModInitializer {
         //
         final Gson gson = new Gson();
         final GsonModConfig gsonConfig = gson.fromJson(stripComments(effectiveConfigRaw), GsonModConfig.class);
-        TrailblazerService.getInstance().configure(loadConfig(gsonConfig));
+        WallSafeService.getInstance().configure(loadConfig(gsonConfig));
         //
         // All done
         //
         logger.info(LOG_PREFIX + "Initialized" + (isCustomConfig ? " with custom configuration." : "."));
     }
 
-    private static TrailblazerRuntimeConfig loadConfig(GsonModConfig config) {
+    private static WallSafeRuntimeConfig loadConfig(GsonModConfig config) {
         requireNonNull(config);
         final ImmutableList.Builder<Rule> builder = ImmutableList.builder();
         for (int i=0; i < config.rules.size(); i++) {
@@ -107,7 +107,7 @@ public class TrailblazerInitializer implements ModInitializer {
             );
             builder.add(rule);
         }
-        return new TrailblazerRuntimeConfig(builder.build());
+        return new WallSafeRuntimeConfig(builder.build());
     }
 
     private static Set<Identifier> toIdentifierSet(List<String> rawIds) {

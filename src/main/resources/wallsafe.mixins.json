@@ -1,10 +1,10 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.pcal.trailblazer.mixins",
+  "package": "net.pcal.wallsafe.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "EntityMoved"
+    "BlockClicked"
   ],
   "injectors": {
     "defaultRequire": 1

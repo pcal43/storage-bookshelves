@@ -1,4 +1,4 @@
-package net.pcal.trailblazer;
+package net.pcal.wallsafe;
 
 import com.google.common.collect.*;
 import net.minecraft.entity.Entity;
@@ -14,14 +14,14 @@ import static java.util.Objects.requireNonNull;
  * Runtime representation of configuration. FIXME should allow more than one RBC per block bootId
  */
 @SuppressWarnings("ClassCanBeRecord")
-class TrailblazerRuntimeConfig {
+class WallSafeRuntimeConfig {
 
     private final List<Rule> rules;
     private final ListMultimap<Identifier, Rule> rulesPerBlock = ArrayListMultimap.create();
     private final SetMultimap<Identifier, Rule> rulesPerEntity = HashMultimap.create();
     private final SetMultimap<SpawnGroup, Rule> rulesPerSpawnGroup = HashMultimap.create();
 
-    TrailblazerRuntimeConfig(List<Rule> rules) {
+    WallSafeRuntimeConfig(List<Rule> rules) {
         this.rules = requireNonNull(rules);
         for (final Rule rule : rules) {
             this.rulesPerBlock.put(rule.blockId(), rule);

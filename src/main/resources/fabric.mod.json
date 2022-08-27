@@ -1,25 +1,25 @@
 {
   "schemaVersion": 1,
-  "id": "trailblazer",
+  "id": "wallsafe",
   "version": "${version}",
-  "name": "Trailblazer",
-  "description": "Vanilla-friendly trails",
+  "name": "WallSafe",
+  "description": "Vanilla-friendly hidden storage",
   "authors": ["pcal.net"],
 
   "contact": {
-    "homepage": "https://github.com/pcal43/trailblazer",
-    "sources": "https://github.com/pcal43/trailblazer"
+    "homepage": "https://github.com/pcal43/wallsafe",
+    "sources": "https://github.com/pcal43/wallsafe"
   },
   "license": "MIT",
   "icon": "",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.pcal.trailblazer.TrailblazerInitializer"
+      "net.pcal.wallsafe.WallSafeInitializer"
     ]
   },
   "mixins": [
-    "trailblazer.mixins.json"
+    "wallsafe.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.11.3",
