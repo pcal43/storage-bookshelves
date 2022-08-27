@@ -93,6 +93,7 @@ public class WallSafeInitializer implements ModInitializer {
         requireNonNull(config);
         final ImmutableList.Builder<Rule> builder = ImmutableList.builder();
         for (int i=0; i < config.rules.size(); i++) {
+            /**
             final GsonRuleConfig gsonRule = config.rules.get(i);
             final Rule rule = new Rule(
                     gsonRule.name != null ? gsonRule.name : "rule-"+i,
@@ -106,6 +107,7 @@ public class WallSafeInitializer implements ModInitializer {
                     toIdentifierSetList(gsonRule.onlyIfBoots)
             );
             builder.add(rule);
+             **/
         }
         return new WallSafeRuntimeConfig(builder.build());
     }

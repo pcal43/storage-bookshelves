@@ -1,9 +1,9 @@
 package net.pcal.wallsafe;
 
 import com.google.common.collect.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.SpawnGroup;
+import net.minecraft.block.Block;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 
 import java.util.*;
@@ -18,80 +18,38 @@ class WallSafeRuntimeConfig {
 
     private final List<Rule> rules;
     private final ListMultimap<Identifier, Rule> rulesPerBlock = ArrayListMultimap.create();
-    private final SetMultimap<Identifier, Rule> rulesPerEntity = HashMultimap.create();
-    private final SetMultimap<SpawnGroup, Rule> rulesPerSpawnGroup = HashMultimap.create();
 
     WallSafeRuntimeConfig(List<Rule> rules) {
         this.rules = requireNonNull(rules);
         for (final Rule rule : rules) {
-            this.rulesPerBlock.put(rule.blockId(), rule);
-            rule.entityIds().forEach(id -> this.rulesPerEntity.put(id, rule));
-            rule.spawnGroups().forEach(group -> this.rulesPerSpawnGroup.put(group, rule));
-        }
-    }
-
-    List<Rule> getRuleListForBlock(Identifier blockId) {
-        return this.rulesPerBlock.get(blockId);
-    }
-
-    Set<Rule> getRulesForEntity(Entity entity) {
-        final Identifier entityId = Registry.ENTITY_TYPE.getId(entity.getType());
-        if (this.rulesPerSpawnGroup.isEmpty()) {
-            return this.rulesPerEntity.get(entityId);
-        } else {
-            final SpawnGroup spawnGroup = entity.getType().getSpawnGroup();
-            final Set<Rule> spawnGroupRules = this.rulesPerSpawnGroup.get(spawnGroup);
-            if (spawnGroupRules.isEmpty()) {
-                return this.rulesPerEntity.get(entityId);
-            } else {
-                // FIXME? I suppose we could also be build up a cache of these things
-                return Sets.union(this.rulesPerEntity.get(entityId), spawnGroupRules);
+            for(Identifier clickedBlockId : rule.clickedBlockIds) {
+                this.rulesPerBlock.put(clickedBlockId, rule);
             }
         }
+    }
+
+    List<Rule> getRulesForBlock(Identifier clickedBlockId) {
+        return this.rulesPerBlock.get(clickedBlockId);
     }
 
     record Rule(
             String name,
-            Identifier blockId,
-            Identifier nextId,
-            int stepCount,
-            int timeoutTicks,
-            Set<Identifier> entityIds,
-            Set<SpawnGroup> spawnGroups,
-            List<Set<Identifier>> skipIfBoots,
-            List<Set<Identifier>> onlyIfBoots
+            List<Identifier> clickedBlockIds,
+            List<Identifier> adjacentBlockIds,
+            List<String> adjacentBlockNames,
+            List<Direction> directions
     ) {
 
-        Rule(
-                String name,
-                Identifier blockId,
-                Identifier nextId,
-                int stepCount,
-                int timeoutTicks,
-                Set<Identifier> entityIds,
-                Set<SpawnGroup> spawnGroups,
-                List<Set<Identifier>> skipIfBoots,
-                List<Set<Identifier>> onlyIfBoots) {
+        Rule(String name,
+             List<Identifier> clickedBlockIds,
+             List<Identifier> adjacentBlockIds,
+             List<String> adjacentBlockNames,
+             List<Direction> directions) {
             this.name = name != null ? name : "unnamed";
-            this.blockId = requireNonNull(blockId);
-            this.nextId = requireNonNull(nextId);
-            this.stepCount = stepCount;
-            this.timeoutTicks = timeoutTicks;
-            this.entityIds = emptySetIfNull(entityIds);
-            this.spawnGroups = emptySetIfNull(spawnGroups);
-            this.skipIfBoots = emptyListIfNull(skipIfBoots);
-            this.onlyIfBoots = emptyListIfNull(onlyIfBoots);
-            if (!this.skipIfBoots.isEmpty() && !this.onlyIfBoots.isEmpty()) {
-                throw new RuntimeException("Rules can't set both skipIfBoots and onlyIfBoots");
-            }
-        }
-
-        private static <T> Set<T> emptySetIfNull(Set<T> set) {
-            return set == null ? Collections.emptySet() : set;
-        }
-
-        private static <T> List<T> emptyListIfNull(List<T> list) {
-            return list == null ? Collections.emptyList() : list;
+            this.clickedBlockIds = clickedBlockIds;
+            this.adjacentBlockIds = adjacentBlockIds;
+            this.directions = directions != null ? directions : List.of(Direction.values());
+            this.adjacentBlockNames = adjacentBlockNames;
         }
     }
 }
