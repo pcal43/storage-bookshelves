@@ -1,25 +1,25 @@
 {
   "schemaVersion": 1,
-  "id": "wallsafe",
+  "id": "proxyblocks",
   "version": "${version}",
-  "name": "WallSafe",
-  "description": "Vanilla-friendly hidden storage",
+  "name": "ProxyBlocks",
+  "description": "Vanilla-friendly secret storage",
   "authors": ["pcal.net"],
 
   "contact": {
-    "homepage": "https://github.com/pcal43/wallsafe",
-    "sources": "https://github.com/pcal43/wallsafe"
+    "homepage": "https://github.com/pcal43/proxyblocks",
+    "sources": "https://github.com/pcal43/proxyblocks"
   },
   "license": "MIT",
   "icon": "",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.pcal.wallsafe.WallSafeInitializer"
+      "net.pcal.proxyblocks.ProxyBlocksInitializer"
     ]
   },
   "mixins": [
-    "wallsafe.mixins.json"
+    "proxyblocks.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.11.3",

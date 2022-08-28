@@ -1,4 +1,4 @@
-package net.pcal.wallsafe;
+package net.pcal.proxyblocks;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
-import net.pcal.wallsafe.WallSafeRuntimeConfig.Rule;
+import net.pcal.proxyblocks.ProxtBlocksRuntimeConfig.Rule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,17 +19,8 @@ import java.util.List;
 import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
-import static net.pcal.wallsafe.WallSafeService.LOGGER_NAME;
-import static net.pcal.wallsafe.WallSafeService.LOG_PREFIX;
 
-public class WallSafeInitializer implements ModInitializer {
-
-    // ===================================================================================
-    // Constants
-
-    private static final Path CUSTOM_CONFIG_PATH = Paths.get("config", "wallsafe.json5");
-    private static final Path DEFAULT_CONFIG_PATH = Paths.get("config", "wallsafe-default.json5");
-    private static final String CONFIG_RESOURCE_NAME = "wallsafe-default.json5";
+public class ProxyBlocksInitializer implements ModInitializer {
 
     // ===================================================================================
     // ModInitializer implementation
@@ -37,37 +28,43 @@ public class WallSafeInitializer implements ModInitializer {
     @Override
     public void onInitialize() {
         try {
-            initialize();
+            initialize("proxyblocks");
         } catch (IOException ioe) {
             throw new RuntimeException(ioe);
         }
     }
 
     // ===================================================================================
-    // Private methods
+    // Public methods
 
-    private void initialize() throws IOException {
-        final Logger logger = LogManager.getLogger(LOGGER_NAME);
+    public static void initialize(final String modName) throws IOException {
+        final Path customConfigPath = Paths.get("config", modName + ".json5");
+        final Path defaultConfigPath = Paths.get("config", modName + "-default.json5");
+        final String configResourceName = modName + "-default.json5";
+        final String loggerName = modName;
+        final String logPrefix = "["+loggerName+"] ";
+
+        final Logger logger = LogManager.getLogger(loggerName);
         //
         // Load the default configuration from resources and write it as the -default in the installation
         //
         final String defaultConfigResourceRaw;
-        try (InputStream in = WallSafeInitializer.class.getClassLoader().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
+        try (InputStream in = ProxyBlocksInitializer.class.getClassLoader().getResourceAsStream(configResourceName)) {
             if (in == null) {
-                throw new FileNotFoundException("Unable to load resource " + CONFIG_RESOURCE_NAME); // wat
+                throw new FileNotFoundException("Unable to load resource " + configResourceName); // wat
             }
             defaultConfigResourceRaw = new String(in.readAllBytes(), StandardCharsets.UTF_8);
         }
-        DEFAULT_CONFIG_PATH.getParent().toFile().mkdirs();
-        Files.writeString(DEFAULT_CONFIG_PATH, defaultConfigResourceRaw);
+        defaultConfigPath.getParent().toFile().mkdirs();
+        Files.writeString(defaultConfigPath, defaultConfigResourceRaw);
         //
         // Figure out whether to use custom or default config
         //
         final boolean isCustomConfig;
         final String effectiveConfigRaw;
-        if (CUSTOM_CONFIG_PATH.toFile().exists()) {
-            logger.info(LOG_PREFIX + "Using custom configuration.");
-            effectiveConfigRaw = Files.readString(CUSTOM_CONFIG_PATH);
+        if (customConfigPath.toFile().exists()) {
+            logger.info(logPrefix + "Using custom configuration.");
+            effectiveConfigRaw = Files.readString(customConfigPath);
             isCustomConfig = true;
         } else {
             effectiveConfigRaw = defaultConfigResourceRaw;
@@ -78,14 +75,14 @@ public class WallSafeInitializer implements ModInitializer {
         //
         final Gson gson = new Gson();
         final GsonModConfig gsonConfig = gson.fromJson(stripComments(effectiveConfigRaw), GsonModConfig.class);
-        WallSafeService.getInstance().configure(loadConfig(gsonConfig));
+        ProxyBlocksService.getInstance().configure(loadConfig(gsonConfig));
         //
         // All done
         //
-        logger.info(LOG_PREFIX + "Initialized" + (isCustomConfig ? " with custom configuration." : "."));
+        logger.info(logPrefix + "Initialized" + (isCustomConfig ? " with custom configuration." : "."));
     }
 
-    private static WallSafeRuntimeConfig loadConfig(GsonModConfig config) {
+    private static ProxtBlocksRuntimeConfig loadConfig(GsonModConfig config) {
         requireNonNull(config);
         final ImmutableList.Builder<Rule> builder = ImmutableList.builder();
         for (int i=0; i < config.rules.size(); i++) {
@@ -99,7 +96,7 @@ public class WallSafeInitializer implements ModInitializer {
             );
             builder.add(rule);
         }
-        return new WallSafeRuntimeConfig(builder.build());
+        return new ProxtBlocksRuntimeConfig(builder.build());
     }
 
     private static Set<Identifier> toIdentifierSetOrNull(List<String> rawIds) {
@@ -116,10 +113,11 @@ public class WallSafeInitializer implements ModInitializer {
         return ImmutableSet.copyOf(rawStrings);
     }
 
+    @SuppressWarnings("ConstantConditions")
     private static List<Direction> toDirectionListOrNull(List<String> rawIds) {
         if (rawIds == null || rawIds.isEmpty()) return null;
         final ImmutableList.Builder<Direction> builder = ImmutableList.builder();
-        rawIds.forEach(d -> builder.add(Direction.byName(d)));
+        rawIds.forEach(d -> builder.add(Direction.byName(requireNonNull(d))));
         return builder.build();
     }
 

@@ -1,4 +1,4 @@
-package net.pcal.wallsafe;
+package net.pcal.proxyblocks;
 
 import com.google.common.collect.*;
 import net.minecraft.util.Identifier;
@@ -12,12 +12,12 @@ import static java.util.Objects.requireNonNull;
  * Runtime representation of configuration. FIXME should allow more than one RBC per block bootId
  */
 @SuppressWarnings("ClassCanBeRecord")
-class WallSafeRuntimeConfig {
+class ProxtBlocksRuntimeConfig {
 
     private final List<Rule> rules;
     private final ListMultimap<Identifier, Rule> rulesPerBlock = ArrayListMultimap.create();
 
-    WallSafeRuntimeConfig(List<Rule> rules) {
+    ProxtBlocksRuntimeConfig(List<Rule> rules) {
         this.rules = requireNonNull(rules);
         for (final Rule rule : rules) {
             for(Identifier clickedBlockId : rule.clickedBlockIds) {

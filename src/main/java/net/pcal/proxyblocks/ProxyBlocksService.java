@@ -1,18 +1,9 @@
-package net.pcal.wallsafe;
+package net.pcal.proxyblocks;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.math.DoubleMath;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -21,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.pcal.wallsafe.WallSafeRuntimeConfig.Rule;
+import net.pcal.proxyblocks.ProxtBlocksRuntimeConfig.Rule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -34,7 +25,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * Central singleton service.
  */
-public class WallSafeService {
+public class ProxyBlocksService {
 
     // ===================================================================================
     // Constants
@@ -46,14 +37,14 @@ public class WallSafeService {
     // Singleton
 
     private static final class SingletonHolder {
-        private static final WallSafeService INSTANCE;
+        private static final ProxyBlocksService INSTANCE;
 
         static {
-            INSTANCE = new WallSafeService();
+            INSTANCE = new ProxyBlocksService();
         }
     }
 
-    public static WallSafeService getInstance() {
+    public static ProxyBlocksService getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
@@ -61,11 +52,11 @@ public class WallSafeService {
     // ===================================================================================
     // Constructors
 
-    WallSafeService() {
+    ProxyBlocksService() {
 
     }
 
-    public void configure(WallSafeRuntimeConfig config) {
+    public void configure(ProxtBlocksRuntimeConfig config) {
         this.config = requireNonNull(config);
     }
 
@@ -73,7 +64,7 @@ public class WallSafeService {
     // Fields
 
     private final Logger logger = LogManager.getLogger(LOGGER_NAME);
-    private WallSafeRuntimeConfig config;
+    private ProxtBlocksRuntimeConfig config;
 
     /**
      * This will be called whenever a player uses a block.
