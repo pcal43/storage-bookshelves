@@ -11,7 +11,7 @@ To use it:
 ## Features
 * Does NOT add any new blocks to your world.  
 * Does NOT have to be installed on the client
-* Fully customizable.  Change the default effects or create your own.
+* Fully customizable.
 
 ## Customization
 
