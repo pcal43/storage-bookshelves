@@ -1,6 +1,7 @@
 package net.pcal.storage_bookshelves;
 
 import net.fabricmc.api.ModInitializer;
+
 import java.io.IOException;
 import java.util.List;
 
