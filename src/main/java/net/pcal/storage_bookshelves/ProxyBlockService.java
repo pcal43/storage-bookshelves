@@ -30,12 +30,6 @@ import static java.util.Objects.requireNonNull;
 public class ProxyBlockService {
 
     // ===================================================================================
-    // Constants
-
-    public static final String LOGGER_NAME = "barrelshelves";
-    public static final String LOG_PREFIX = "[BarrelShelves] ";
-
-    // ===================================================================================
     // Singleton
 
     private static final class SingletonHolder {
