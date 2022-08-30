@@ -1,6 +1,6 @@
-# Barrel Shelves
+# Storage Bookshelves
 
-Barrel Shelves is a Fabric minecraft mod that lets you store stuff in bookshelves.
+Storage Bookshelves is a Fabric minecraft mod that lets you store stuff in bookshelves.
 
 To use it:
 * Create a Barrel and name it 'Bookshelf'
@@ -17,7 +17,7 @@ To use it:
 
 To configure the mod, follow the instructions in the default config file:
 
-https://github.com/pcal43/barrelshelf/blob/main/src/main/resources/barrelshelf-default.json5
+https://github.com/pcal43/storage-bookshelves/blob/main/src/main/resources/storage-bookshelves-default.json5
 
 ## Legal
 
