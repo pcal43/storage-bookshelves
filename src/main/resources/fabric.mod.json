@@ -3,7 +3,7 @@
   "id": "storage-bookshelves",
   "version": "${version}",
   "name": "Storage Bookshelves",
-  "description": "Vanilla-friendly bookshelve storage",
+  "description": "Vanilla-friendly bookshelf storage",
   "authors": ["pcal.net"],
 
   "contact": {
@@ -15,7 +15,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.pcal.barrelshelf.StorageBookshelvesInitializer"
+      "net.pcal.storage_bookshelves.StorageBookshelvesInitializer"
     ]
   },
   "mixins": [
