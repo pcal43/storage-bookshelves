@@ -1,4 +1,4 @@
-package net.pcal.barrelshelf.mixins;
+package net.pcal.storage_bookshelves.mixins;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
@@ -8,7 +8,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.pcal.barrelshelf.ProxyBlockService;
+import net.pcal.storage_bookshelves.ProxyBlockService;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

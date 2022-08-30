@@ -1,4 +1,4 @@
-package net.pcal.barrelshelf;
+package net.pcal.storage_bookshelves;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;

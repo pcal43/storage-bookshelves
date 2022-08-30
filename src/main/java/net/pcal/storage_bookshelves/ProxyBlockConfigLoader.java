@@ -1,4 +1,4 @@
-package net.pcal.barrelshelf;
+package net.pcal.storage_bookshelves;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;

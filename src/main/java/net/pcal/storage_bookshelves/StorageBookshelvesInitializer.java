@@ -1,4 +1,4 @@
-package net.pcal.barrelshelf;
+package net.pcal.storage_bookshelves;
 
 import net.fabricmc.api.ModInitializer;
 import java.io.IOException;
