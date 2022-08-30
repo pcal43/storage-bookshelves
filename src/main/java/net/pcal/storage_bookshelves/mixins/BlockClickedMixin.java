@@ -22,7 +22,7 @@ public class BlockClickedMixin {
 
     // get notified any time an entity's blockPos is updated
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
-    void _entity_blockPos_update(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
+    void _onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         if (world.isClient) return;
         ProxyBlockService.getInstance().onUseBlock(state, world, pos,player, hand ,hit, cir);
     }
