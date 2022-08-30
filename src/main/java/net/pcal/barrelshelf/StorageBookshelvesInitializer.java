@@ -4,7 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import java.io.IOException;
 import java.util.List;
 
-public class BarrelShelfInitializer implements ModInitializer {
+public class StorageBookshelvesInitializer implements ModInitializer {
 
     // ===================================================================================
     // ModInitializer implementation
@@ -12,7 +12,7 @@ public class BarrelShelfInitializer implements ModInitializer {
     @Override
     public void onInitialize() {
         try {
-            final List<ProxyBlockRule> rules = ProxyBlockConfigLoader.loadRulesFromConfig("barrelshelf");
+            final List<ProxyBlockRule> rules = ProxyBlockConfigLoader.loadRulesFromConfig("storage-bookshelves");
             ProxyBlockService.getInstance().addRules(rules);
         } catch (IOException ioe) {
             throw new RuntimeException(ioe);
